@@ -4,25 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.andeslaw.foodorder.MainActivity">
+    tools:context="com.andeslaw.foodorder.SelectRestaurant">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" >
+
+            <Spinner
+                android:id="@+id/selectRestaurant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/gotoSelectRestaurant"
+                android:id="@+id/button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="gotoSelectRestaurant"
-                android:text="Select Restaurant" />
+                android:onClick="gotoMenu"
+                android:text="Go To Menu" />
         </LinearLayout>
-
     </ScrollView>
-
 </android.support.constraint.ConstraintLayout>
