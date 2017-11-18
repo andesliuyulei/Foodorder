@@ -11,6 +11,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/group1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -21,6 +22,30 @@
                 android:layout_height="wrap_content"
                 android:onClick="gotoSelectRestaurant"
                 android:text="Select Restaurant" />
+
+            <Spinner
+                android:id="@+id/selectRestaurant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/gotoMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="gotoMenu"
+                android:text="Go To Menu" />
+
+            <Spinner
+                android:id="@+id/selectFood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/addToOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add To Order" />
+
         </LinearLayout>
 
     </ScrollView>
