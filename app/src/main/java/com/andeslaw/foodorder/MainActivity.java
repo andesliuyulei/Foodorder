@@ -17,8 +17,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.common.ConnectionResult;
@@ -35,6 +37,8 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.script.model.ExecutionRequest;
 import com.google.api.services.script.model.Operation;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
     private static String[] restaurantList = null;
     private static String selectedRestaurant = null;
     private static String[] menuList = null;
+    private static String selectedFood = null;
+    private static String[] foodList = null;
+    private static String[] unitPriceList = null;
+    private static String[] itemUnitList = null;
+    private static String[] priceCurrencyList = null;
 
     //private LinearLayout group1 = null;
     //private LinearLayout group2 = null;
@@ -72,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
     private Button gotoMenu = null;
     private Spinner selectFood = null;
     private Button addToOrder = null;
+    private TextView itemPrice = null;
+    private EditText itemQuantity = null;
+    private TextView itemUnit = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +97,17 @@ public class MainActivity extends AppCompatActivity {
         gotoMenu = findViewById(R.id.gotoMenu);
         selectFood = findViewById(R.id.selectFood);
         addToOrder = findViewById(R.id.addToOrder);
+        itemPrice = findViewById(R.id.itemPrice);
+        itemQuantity = findViewById(R.id.itemQuantity);
+        itemUnit = findViewById(R.id.itemUnit);
 
         selectRestauralt.setVisibility(View.GONE);
         gotoMenu.setVisibility(View.GONE);
         selectFood.setVisibility(View.GONE);
         addToOrder.setVisibility(View.GONE);
+        itemPrice.setVisibility(View.GONE);
+        itemQuantity.setVisibility(View.GONE);
+        itemUnit.setVisibility(View.GONE);
 
         // Initialize credentials and service object..
         accountCredential = GoogleAccountCredential.usingOAuth2(
@@ -118,13 +136,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startMenu() {
+        int menuLength = menuList.length;
+        foodList = new String[menuLength];
+        itemUnitList = new String[menuLength];
+        unitPriceList = new String[menuLength];
+        priceCurrencyList = new String[menuLength];
+        for (int i=0; i<menuLength; i++) {
+            String[] itemInfo = menuList[i].split("\\|");
+            foodList[i] = itemInfo[0];
+            itemUnitList[i] = itemInfo[1];
+            unitPriceList[i] = itemInfo[2];
+            priceCurrencyList[i] = itemInfo[3];
+        }
         selectFood.setVisibility(View.VISIBLE);
         addToOrder.setVisibility(View.VISIBLE);
-        selectFood.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menuList));
+        selectFood.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, foodList));
     }
 
     private void getMenuListFromApi() {
         new MakeRequestTask(accountCredential, "getMenuList").execute();
+    }
+
+    public void gotoSingleItemOrder(View view) {
+        int itemId = selectFood.getSelectedItemPosition();
+        selectedFood = selectFood.getSelectedItem().toString();
+        itemPrice.setText(unitPriceList[itemId] + " " + priceCurrencyList[itemId] + " 每 " + itemUnitList[itemId]);
+        itemQuantity.clearComposingText();
+        itemUnit.setText(itemUnitList[itemId]);
+        itemPrice.setVisibility(View.VISIBLE);
+        itemQuantity.setVisibility(View.VISIBLE);
+        itemUnit.setVisibility(View.VISIBLE);
     }
 
     /**
